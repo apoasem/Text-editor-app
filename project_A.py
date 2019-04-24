@@ -1,15 +1,11 @@
-import tkMessageBox as messageBox
-import tkColorChooser as colorChooser
-import tkFont
-from Tkinter import *
-import tkFileDialog
-from heapq import heappush, heappop, heapify
-from collections import defaultdict
+import tkinter.messagebox as messageBox
+import  tkinter.colorchooser as colorChooser
+from tkinter import *
+from tkinter import filedialog
+from tkinter import font
 import codecs
 import os
 import re
-
-
 
 mywindow = Tk()
 
@@ -19,7 +15,7 @@ mywindow.title("My Text Editor")
 
 buttonframe = Frame()       # make frame
 
-customFont = tkFont.Font(family="Helvetica", size=8)
+customFont = font.Font(family="Helvetica", size=8)
 
 mytext = Text(mywindow, width=400, height=380, bd = 2, font= customFont)
 
@@ -144,7 +140,6 @@ def decode_message(code,tree):
 #----------------------------------------------------------------------
 
 def open():
-    x = ""
     x = mytext.get('1.0', END + '-1c')
     if x != "":
         ans = messageBox.askquestion(title="save file", message="would you like to save file")
@@ -159,10 +154,10 @@ def open():
         pass
 
 
-    extensions = [('All files','*'),  ('Runlength files','*.RLTXT'), ('Huffman files','*.HFMNTXT'), ('text files','*.txt')]
+    extensions = [('All files','*'),  ('Runlength files','*.rltxt'), ('Huffman files','*.huf'), ('text files','*.txt')]
 
 
-    opmyfile = tkFileDialog.askopenfile(parent=mywindow, mode='rb', title='Select a file', filetypes=extensions )
+    opmyfile = filedialog.askopenfile(parent=mywindow, mode='rb', title='Select a file', filetypes=extensions )
     if opmyfile != None:
         myfile_path = os.path.abspath(opmyfile.name)
         myfile = codecs.open(myfile_path,"rb", encoding="utf-8")
@@ -170,13 +165,13 @@ def open():
         if myfile != None:
             exe = myfile.name
             ex = exe.split(".")[-1]
-            if ex == "RLTXT":
+            if ex == "RLTXT" or "rltxt":
                 contents = myfile.read()
                 vava = [(x[0],int(x[1])) for x in re.findall(r'(?:(\w+?)(\d+))+?',contents)] # read list of tuples from file
                 mycontent = decode_runlength(vava)
                 mytext.insert('1.0', mycontent)
                 myfile.close()
-            elif ex == "HFMNTXT":
+            elif ex == "HUf" or "huf":
                 # not working
 
                 tree = build_huffman_tree("abdfbcbedbabcfefbdddedbbfababc")
@@ -199,7 +194,7 @@ def open():
 def save():
     extensions = [('Text files', '*.txt')]
 
-    opmyfile = tkFileDialog.asksaveasfile(mode='w', filetypes= extensions, defaultextension=".txt")
+    opmyfile = filedialog.asksaveasfile(mode='w', filetypes= extensions, defaultextension=".txt")
     if opmyfile != None:
         myfile_path = os.path.abspath(opmyfile.name)
         myfile = codecs.open(myfile_path,"w", encoding="utf-8")
@@ -211,8 +206,8 @@ def save():
 
 
 def save_as():
-    #extensions = [('txt files', '*.txt'), ('Runlength files', '*.rltxt'), ('Huffman files', '*.huf'), ('All files', '*')]
-    opmyfile = tkFileDialog.asksaveasfile(mode="w")
+    # extensions = [('txt files', '*.txt'), ('Runlength files', '*.rltxt'), ('Huffman files', '*.huf'), ('All files', '*')]
+    opmyfile = filedialog.asksaveasfile(mode="w", title='please type file extension otherwise file will be saved as txt file', defaultextension=".txt")
     if opmyfile != None:
         myfile_path = os.path.abspath(opmyfile.name)
         myfile = codecs.open(myfile_path, "rb", encoding="utf-8")
@@ -222,17 +217,19 @@ def save_as():
             myfile_path = os.path.abspath(opmyfile.name)
             myfile = codecs.open(myfile_path, "w", encoding="utf-8")
             ex = exe.split(".")[-1]
-            if ex == "RLTXT":
+            if ex == "rltxt":
+                print("rltxt")
                 myfile.write(encode_runlength(mytext.get('1.0', END + '-1c')))
 
-            elif ex == "HFMNTXT":
-
+            elif ex == "huf":
+                print("HUF")
                 tree = build_huffman_tree(mytext.get('1.0', END + '-1c'))
                 table = encode_alphabet(tree[0], tree)
                 code = encode_message(mytext.get('1.0', END + '-1c'), table)
                 myfile.write(code)
 
             elif ex == "txt":
+                print("txt")
                 myfile.write((mytext.get('1.0', END + '-1c')))
             else:
                 myfile.write((mytext.get('1.0', END + '-1c')))
