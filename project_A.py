@@ -218,7 +218,6 @@ def save_as():
             myfile = codecs.open(myfile_path, "w", encoding="utf-8")
             ex = exe.split(".")[-1]
             if ex == "rle":
-                print("rle")
                 myfile.write(encode_runlength(mytext.get('1.0', END + '-1c')))
 
             elif ex == "huf":
@@ -228,7 +227,6 @@ def save_as():
                 myfile.write(code)
 
             elif ex == "txt":
-                print("txt")
                 myfile.write((mytext.get('1.0', END + '-1c')))
             else:
                 myfile.write((mytext.get('1.0', END + '-1c')))
