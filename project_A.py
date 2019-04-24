@@ -154,7 +154,7 @@ def open():
         pass
 
 
-    extensions = [('All files','*'),  ('Runlength files','*.rltxt'), ('Huffman files','*.huf'), ('text files','*.txt')]
+    extensions = [('All files','*'),  ('Runlength files','*.rle'), ('Huffman files','*.huf'), ('text files','*.txt')]
 
 
     opmyfile = filedialog.askopenfile(parent=mywindow, mode='rb', title='Select a file', filetypes=extensions )
@@ -165,7 +165,7 @@ def open():
         if myfile != None:
             exe = myfile.name
             ex = exe.split(".")[-1]
-            if ex == "RLTXT" or "rltxt":
+            if ex == "RLE" or "rle":
                 contents = myfile.read()
                 vava = [(x[0],int(x[1])) for x in re.findall(r'(?:(\w+?)(\d+))+?',contents)] # read list of tuples from file
                 mycontent = decode_runlength(vava)
@@ -217,12 +217,11 @@ def save_as():
             myfile_path = os.path.abspath(opmyfile.name)
             myfile = codecs.open(myfile_path, "w", encoding="utf-8")
             ex = exe.split(".")[-1]
-            if ex == "rltxt":
-                print("rltxt")
+            if ex == "rle":
+                print("rle")
                 myfile.write(encode_runlength(mytext.get('1.0', END + '-1c')))
 
             elif ex == "huf":
-                print("HUF")
                 tree = build_huffman_tree(mytext.get('1.0', END + '-1c'))
                 table = encode_alphabet(tree[0], tree)
                 code = encode_message(mytext.get('1.0', END + '-1c'), table)
