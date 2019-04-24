@@ -206,8 +206,8 @@ def save():
 
 
 def save_as():
-    # extensions = [('txt files', '*.txt'), ('Runlength files', '*.rltxt'), ('Huffman files', '*.huf'), ('All files', '*')]
-    opmyfile = filedialog.asksaveasfile(mode="w", title='please type file extension otherwise file will be saved as txt file', defaultextension=".txt")
+    extensions = [('txt files', '*.txt'), ('All files', '*')]
+    opmyfile = filedialog.asksaveasfile(mode="w", title='please type file extension otherwise file will be saved as txt file', filetypes= extensions,defaultextension=".txt")
     if opmyfile != None:
         myfile_path = os.path.abspath(opmyfile.name)
         myfile = codecs.open(myfile_path, "rb", encoding="utf-8")
